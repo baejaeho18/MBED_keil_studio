@@ -23,12 +23,11 @@ volatile int flag=0;
 volatile int flag2=0;
 volatile int j=0;
 volatile int led_num;
+volatile int busy=0;
 //--------------------------------------------------dma------------------------------
 static void MX_DMA_Init(void);
 static void DMA_IRQHandler(void);
 static void DMA2_Stream3_IRQHandler(void);
-//-----------------------------------------------Color------------------------------------------
-static void setGauge(int color, int guage); 
 
 void flag_func(){
     if(pc.readable() && flag==0){
@@ -42,18 +41,16 @@ int main()
     char ch[10];
     pc.sigio(&flag_func);
     sprintf(ch,"hello");
-    pc.write(ch, strlen(ch));
+    pc.write(ch,strlen(ch));
     address=&ws2812_buffer[0];
     ws2812_init();
-    //MX_DMA_Init();
-    ws2812_pixel_all( 0,  0,  0);
+    ws2812_pixel_all( 0,  1,  0);
     //ws2812_pixel(led_num,1,0,0);//G-R-B
     ws2812_send_spi();
     while (true) {
-        
-        if(flag==1){
-                            
-            flag=0;// read 1~5 level and print led light accoriding to number of level                 
+        if(flag==1){      
+            // read 1~5 level and print led light accoriding to number of level    
+            flag=0;             
             pc.read(&ch[j],1);
             pc.write(&ch[j],1);
             j++;
@@ -67,15 +64,15 @@ int main()
         }
         if(flag2==1){
             flag2=0;
-            ws2812_pixel(led_num,0,0,1);//G-R-B
-            ws2812_send_spi();
-            ThisThread::sleep_for(2s);
-            ws2812_pixel(led_num,0,1,0);//G-R-B
-            ws2812_send_spi();
-            ThisThread::sleep_for(2s);
-            ws2812_pixel(led_num,1,0,0);//G-R-B
-            ws2812_send_spi();
+        }
 
+        for(int i=0;i<=led_num;i++){
+            ws2812_pixel_all(0,0,0);
+            ws2812_send_spi();
+            wait_us(50000);
+            ws2812_pixel(i,1,1,1);//G-R-B
+            ws2812_send_spi();
+            wait_us(50000);
         }
     }      
 }
@@ -85,22 +82,17 @@ void ws2812_init(void) {
     spi.frequency(6250000);//0.08us *8 = 0.64us
     memset(ws2812_buffer, 0, WS2812_BUFFER_SIZE);
     spi.set_dma_usage(DMA_USAGE_ALWAYS);
+    MX_DMA_Init();
     ws2812_send_spi();
-}
-
-void SPI_Write(uint8_t *pu8Data, uint32_t u32Len)
-{
-  uint32_t i;
-   for( i = 0; i< u32Len; i++)
-   {
-     SPI2->DR = pu8Data[i];
-      while(SPI2->SR & 0x80); // SPI is busy
-   }
 }
 
 void ws2812_send_spi(void) {
     //spi.write((const char*)ws2812_buffer,WS2812_BUFFER_SIZE,0,0); 
-    spi.transfer((const char*)ws2812_buffer, WS2812_BUFFER_SIZE, (char*) &empty, 0, NULL, SPI_EVENT_COMPLETE);
+    //spi.transfer((const char*)ws2812_buffer, WS2812_BUFFER_SIZE, (char*) &empty, 0, NULL, SPI_EVENT_COMPLETE);
+    
+    DMA2_Stream3->NDTR = (uint16_t)WS2812_BUFFER_SIZE;
+    DMA2_Stream3->CR |= (0x1UL << (0U));
+    
 }
 
 void WS2812_FILL_BUFFER(uint8_t COLOR ,uint8_t* ptr) {
@@ -108,7 +100,7 @@ void WS2812_FILL_BUFFER(uint8_t COLOR ,uint8_t* ptr) {
         if( COLOR & mask ) { 
             *ptr++ = 0x7c;//0111-1100
         } else { 
-            *ptr++ = 0x40; //1000-0000;
+            *ptr++ = 0x40; //0100-0000;
         }   
     }
 }
@@ -132,64 +124,40 @@ void ws2812_pixel_all(uint8_t g, uint8_t r, uint8_t b) {
     }
 }
 
-void setGauge(int color, int led_no){    // color 0:G, 1:R, 2:B
-    for (int i = 0 ; i < led_no ; i++){
-        uint8_t * ptr = &ws2812_buffer[24*led_no];
-        
-        WS2812_FILL_BUFFER(0,ptr);
-        WS2812_FILL_BUFFER(0,ptr+8);
-        WS2812_FILL_BUFFER(0,ptr+16);
-        switch(color){
-            case 0:
-                WS2812_FILL_BUFFER(1,ptr);
-                break;
-            case 1:
-                WS2812_FILL_BUFFER(1,ptr+8);
-                break;
-            case 2:
-                WS2812_FILL_BUFFER(1,ptr+16);
-                break;
-        }
-    }
-}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
 void MX_DMA_Init(void){
 
    __HAL_RCC_DMA2_CLK_ENABLE();
-
-   DMA2_Stream3->CR |= 11 << 25;       //DMA2 stream 2 channel 3
-    DMA2_Stream3->FCR &= ~(0x1UL << (2U)); // direct mode (FIFO disabled)
-    //dma_fifothreshold_1quarterfull
-    DMA2_Stream3->CR |= 0x00 << DMA_SxCR_PSIZE_Pos;   //spi data register is 8 bit (half word)
-   DMA2_Stream3->CR |= 0x00 << DMA_SxCR_MSIZE_Pos;   // memory size is is 8 bit (half word)
-
-   DMA2_Stream3->CR |= DMA_SxCR_DBM;                 // double buffer mode
-    DMA2_Stream3->CR |= (0x1UL << (10U)); // memory increment (MSIZE = 16 bit)
+   DMA2_Stream3->CR |= 0b11 << 25;       //DMA2 stream 3 channel 3
+    DMA2_Stream3->CR &= ~(0B11 << (11U)); // spi data register is 8 bit (half word)
+    DMA2_Stream3->CR &= ~(0B11 << (13U)); // memory size is is 8 bit (half word)
+    //DMA2_Stream3->CR &= ~(0B00 << (18U)); // double buffer mode
+    DMA2_Stream3->CR |=  (0b1UL << (10U)); // memory increment (MSIZE = 8 bit)
+    DMA2_Stream3->CR |= (0b1UL << (4U));//  active interrupt after transmition
     // peripheral inc_disable
-    DMA2_Stream3->CR |= (0x1UL << (8U));          // circular mode X normal mode 0
+    DMA2_Stream3->CR &= ~(0B1 << (8U)); // circular mode X normal mode 0
+    DMA2_Stream3->CR |= 0B01 << (6U);    // memory to peripheral
+    DMA2_Stream3->CR |= 0B11 << (16U);   // priority level very high
 
-    DMA2_Stream3->CR |= 0x01 << (6U);             // memory to peripheral
-    DMA2_Stream3->CR |= 0x02 << (16U);            // priority level very high
+    DMA2_Stream3->FCR |= (0b1UL << (2U)); //(FIFO abled)
+    DMA2_Stream3->FCR &= ~(0b11<< 0); //dma_fifothreshold_1quarterfull
     DMA2_Stream3->PAR = (uint32_t)&SPI1->DR; // peripheral base address(spi)
     DMA2_Stream3->M0AR = (uint32_t)ws2812_buffer; // memory base address 0
-    //DMA2_Stream3->NDTR = NUM_SAMPLES;              // number of data
-   HAL_DMA_Init(&hdma_spi);
-    __HAL_LINKDMA(&spi, hdmatx, hdma_spi);
+    //dma 스트림 비활성화
+    DMA2_Stream3->NDTR = (uint16_t)WS2812_BUFFER_SIZE;              // number of data
+    //다시 활성화
+    // spi dma 활성화
+    SPI1->CR2 |= SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN;
     HAL_NVIC_SetPriority(DMA2_Stream3_IRQn,0,0);
-    HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+    NVIC_SetVector(DMA2_Stream3_IRQn,(uint32_t)&DMA2_Stream3_IRQHandler);
+    NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+
+    //DMA 전송 시작
+    DMA2_Stream3->CR |= DMA_SxCR_EN;
 }
-*/
+
+void DMA2_Stream3_IRQHandler(void){
+  if (DMA2->LISR & (0x1UL << (27U))) {
+    DMA2->LIFCR |= (0x1UL << (27U));
+  }
+}
