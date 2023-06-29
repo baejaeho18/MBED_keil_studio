@@ -5,31 +5,29 @@
 
 #include "mbed.h"
 
-DigitalOut greenLED(LED1);
-DigitalOut redLED(D2);
-InterruptIn button (BUTTON1);
+DigitalOut greenLED(LED1) ;
+DigitalOut redLED(D2) ;
+InterruptIn button (BUTTON1) ;
 
+volatile int interval = 500 ;
 
-volatile int interval=500;
-
-void buttonPressed()
+void 
+buttonPressed()
 {
-    redLED = !redLED;
-    if(interval<4000){
-        interval += 500;
-    }
+    redLED = !redLED ;
+    if (interval < 4000)
+        interval += 500 ;
     else
-        interval = 500;
+        interval = 500 ;
 }
 
-int main()
+int 
+main()
 {
-    button.fall(&buttonPressed);
+    button.fall(&buttonPressed) ;
 
     while (true) {
-       
-       greenLED = !greenLED;
-       ThisThread::sleep_for(std::chrono::milliseconds(interval));
-
+       greenLED = !greenLED ;
+       ThisThread::sleep_for(std::chrono::milliseconds(interval)) ;
     }
 }
