@@ -8,8 +8,10 @@ int main()
 {
     int interval = 500 ;
 
-    while (true) {
-       if (button == 0) {
+    while (true)
+    {
+       if (button == 0)
+       {
            interval = interval << 1 ;
            if (interval > 2000)
             interval = 250 ;
