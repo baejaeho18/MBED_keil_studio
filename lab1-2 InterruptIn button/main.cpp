@@ -26,7 +26,8 @@ main()
 {
     button.fall(&buttonPressed) ;
 
-    while (true) {
+    while (true)
+    {
        greenLED = !greenLED ;
        ThisThread::sleep_for(std::chrono::milliseconds(interval)) ;
     }
