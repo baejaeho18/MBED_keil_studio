@@ -15,7 +15,6 @@ int main()
             interval = 250 ;
        }
        led = !led ;
-       ThisThread::sleep_for (
-           std::chrono::milliseconds(interval)) ;
+       ThisThread::sleep_for (std::chrono::milliseconds(interval)) ;
     }
 }
