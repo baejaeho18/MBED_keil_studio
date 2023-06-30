@@ -1,0 +1,34 @@
+/* mbed Microcontroller Library
+ * Copyright (c) 2019 ARM Limited
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#include "mbed.h"
+
+DigitalOut led2(LED2);
+Interruptln button(USER_BUTTON);
+Ticker led2_ticker;
+
+float interval = 0.5;
+
+void timeout_cb(void){
+    led2=!led2;
+}
+
+void button_onpressed_cb(void){
+    led2_ticker.detach();
+    interval=interval*2;
+    if(interval>4.0){
+        interval=0.125;
+    }
+    led2=1;
+    led2_ticker.attach(&timeout_cb,interval);
+}
+
+int main()
+{
+    button.mode(PullUp);
+    button.fall(&button_onpressed_cb);
+    led2_ticker.attach(&timeout_cb,interval);
+    while(1){};
+}
