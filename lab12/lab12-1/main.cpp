@@ -44,24 +44,26 @@ void rx_cb(void)
 
 int main()
 {
-    float meas;
-    cs = 1;
-    spi.format(8,0); // 8 bits, mode = 0 ->16bit
-    spi.frequency(1000000); // clock 1 MHz
+    float meas ;
+    cs = 1 ;
+    spi.format(8, 0) ;    // 8 bits, mode = 0 ->16bit
+    spi.frequency(1000000) ;    // clock 1 MHz
     
-    sprintf(tx_buffer, "\r\n SPI Test Program\r\n");
-    pc.write(tx_buffer, strlen(tx_buffer));
-    pc.attach(callback(rx_cb)); 
+    sprintf(tx_buffer, "\r\n SPI Test Program\r\n") ;
+    pc.write(tx_buffer, strlen(tx_buffer)) ;
+    pc.attach(callback(rx_cb)) ; 
     
-    while(1) {
-        flag = 0;
-        sprintf(tx_buffer, "\r\nEnter the value for the potentiometer [0, 255]:");
-        pc.write(tx_buffer, strlen(tx_buffer));
-        while(flag != 1) {}
-        set_MCP41010();
-        meas = ain0.read()* 3300; //[0.0 [1.0] --> 0 ~ 3300 mV
-        sprintf(tx_buffer, "ADC value = %0.f[mV]\r\n", meas);
-        pc.write(tx_buffer, strlen(tx_buffer));
-            
+    while(1)
+    {
+        flag = 0 ;
+        sprintf(tx_buffer, "\r\nEnter the value for the potentiometer [0, 255]:") ;
+        pc.write(tx_buffer, strlen(tx_buffer)) ;
+        
+        while (flag != 1) {}
+
+        set_MCP41010() ;
+        meas = ain0.read() * 3300 ;    // [0.0 [1.0] --> 0 ~ 3300 mV
+        sprintf(tx_buffer, "ADC value = %0.f[mV]\r\n", meas) ;
+        pc.write(tx_buffer, strlen(tx_buffer)) ;
     }
 }
