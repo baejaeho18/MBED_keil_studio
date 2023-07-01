@@ -43,10 +43,10 @@ int main()
         float humi = -6.0 + 125.0 * ((float)raw_humi / 65536.0) ;
         
         
-        gOLED.setTextCursor(13*6, 4*8) ;
+        gOLED.setTextCursor(13 * 6, 4 * 8) ;
         gOLED.printf("%.1f C", temp) ;
 
-        gOLED.setTextCursor(13*6, 6*8) ;
+        gOLED.setTextCursor(13 * 6, 6 * 8) ;
         gOLED.printf("%.1f %%", humi) ;
 
         gOLED.display() ;
