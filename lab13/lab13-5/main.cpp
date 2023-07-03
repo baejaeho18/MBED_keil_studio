@@ -70,7 +70,7 @@ int main()
     {
         sprintf(txBuf_pc, "Connection error!!\r\n") ;
         pc.write(txBuf_pc, strlen(txBuf_pc)) ;
-        return -1 ;
+        return -1
     }
     sprintf(txBuf_pc, "Success!!\r\n") ;
     pc.write(txBuf_pc, strlen(txBuf_pc)) ;
