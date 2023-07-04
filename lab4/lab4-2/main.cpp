@@ -1,7 +1,7 @@
 #include "mbed.h"
 #define MAXIMUM_BUFFER_SIZE 80
-char buf[MAXIMUM_BUFFER_SIZE] ;
 
+char buf[MAXIMUM_BUFFER_SIZE] ;
 static DigitalOut led(LED1) ;
 static BufferedSerial pc(CONSOLE_TX, CONSOLE_RX, 115200) ;
 
