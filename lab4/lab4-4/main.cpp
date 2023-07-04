@@ -7,7 +7,7 @@ float interval = 0.5 ;
 
 void timeout_cb(void)
 {
-    led2 =! led2 ;
+    led2 = !led2 ;
 }
 
 void button_onpressed_cb(void)
