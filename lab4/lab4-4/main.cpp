@@ -17,7 +17,7 @@ void button_onpressed_cb(void)
     if (interval > 4.0)
         interval = 0.125 ;
     led2 = 1 ;
-    led2_ticker.attach(&timeout_cb,interval) ;
+    led2_ticker.attach(&timeout_cb, interval) ;
 }
 
 int main()
