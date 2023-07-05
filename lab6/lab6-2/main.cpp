@@ -11,7 +11,7 @@ float interval = 1 ;
 void timeout_cb(void)
 {
     led2_ticker.detach() ;
-    led2 =! led2 ;
+    led2 = !led2 ;
     led2_ticker.attach(&timeout_cb, interval) ;
 }
 
