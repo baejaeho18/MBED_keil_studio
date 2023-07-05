@@ -12,18 +12,18 @@ void timeout_cb(void)
 {
     led2_ticker.detach() ;
     led2 =! led2 ;
-    led2_ticker.attach(&timeout_cb,interval) ;
+    led2_ticker.attach(&timeout_cb, interval) ;
 }
 
 void timeout_cb2(void)
 {
-    led3 =! led3 ;
+    led3 = !led3 ;
 }
 
 int main()
 {
     led3 = 1 ;
     led2_ticker.attach(&timeout_cb, interval) ;
-    led3_ticker.attach(&timeout_cb2, interval*10) ;
-    while(1){}
+    led3_ticker.attach(&timeout_cb2, interval * 10) ;
+    while(1) {}
 }
