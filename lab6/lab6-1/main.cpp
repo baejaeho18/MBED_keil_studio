@@ -27,5 +27,5 @@ int main()
     button.fall(&button_onpressed_cb) ;
 
     led2_ticker.attach(&timeout_cb, interval) ;
-    while(1){}
+    while(1) {}
 }
