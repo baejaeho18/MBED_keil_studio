@@ -1,8 +1,9 @@
 #include "mbed.h"
 #include <stdio.h>
 
-Timer t ;
 #define MAXIMUM_BUFFER_SIZE 80
+
+Timer t ;
 char buf[MAXIMUM_BUFFER_SIZE] ;
 
 static BufferedSerial pc(CONSOLE_TX, CONSOLE_RX, 115200) ;
