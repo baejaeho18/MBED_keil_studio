@@ -19,7 +19,8 @@ int main()
     sprintf(buf, "\r\n *** ADC Example (Internal Temp Sensor) ***\r\n") ;
     pc.write(buf, strlen(buf)) ;
     t.attach(&timeout_cb, 5s) ;
-    while (true) 
+    
+    while(true) 
     {
         if (flag)
         {
