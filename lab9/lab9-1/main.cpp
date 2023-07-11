@@ -11,23 +11,23 @@ int main()
 {
     float distance ;
 
-    sprintf(buffer,"Mbed OS version %d.%d%d\r\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
-    pc.write(buffer,strlen(buffer)) ;
-    sprintf(buffer, "\r\n Welcome to Utrasonic Sensor Lab.!\r\n");
+    sprintf(buffer, "Mbed OS version %d.%d%d\r\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION) ;
+    pc.write(buffer, strlen(buffer)) ;
+    sprintf(buffer, "\r\n Welcome to Utrasonic Sensor Lab.!\r\n") ;
     pc.write(buffer, strlen(buffer)) ;
 
     trigger = 0 ;
 
-    while(1) 
+    while (1) 
     {
         trigger = 1 ;
         wait_us (20) ;
         trigger = 0 ;
 
         timer1.reset() ; 
-        while (echo ==0) {}
+        while (echo == 0) {}
         timer1.start() ;
-        while (echo ==1) {}
+        while (echo == 1) {}
         timer1.stop() ;
 
         distance = timer1.elapsed_time().count() * 0.017;
