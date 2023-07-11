@@ -30,7 +30,7 @@ int main()
         while (echo == 1) {}
         timer1.stop() ;
 
-        distance = timer1.elapsed_time().count() * 0.017;
+        distance = timer1.elapsed_time().count() * 0.017 ;
         sprintf(buffer, "The ditance is %.2f [cm] \n\r", distance) ;
         pc.write(buffer, strlen(buffer)) ;
         
