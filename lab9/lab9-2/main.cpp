@@ -12,7 +12,7 @@ int main()
     pc.write(buffer, strlen(buffer)) ;
     sprintf(buffer, "\r\n Welcome to Utrasonic Sensor Lab.!\r\n") ;
     pc.write(buffer, strlen(buffer)) ;
-    while(1) 
+    while (1) 
     {  
         sprintf(buffer, "The ditance is %.2f [cm]\n\r", srf05.read()) ;
         pc.write(buffer, strlen(buffer)) ;
