@@ -9,16 +9,15 @@ char buffer[80] ;
 int main()
 {
 
-    sprintf(buffer,"Mbed OS version %d.%d%d\r\n\n",
-            MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
-    pc.write(buffer,strlen(buffer));
-    sprintf(buffer, "\r\n Welcome to Utrasonic Sensor Lab.!\r\n");
-    pc.write(buffer, strlen(buffer));
-    while(1) {
+    sprintf(buffer,"Mbed OS version %d.%d%d\r\n\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION) ;
+    pc.write(buffer,strlen(buffer)) ;
+    sprintf(buffer, "\r\n Welcome to Utrasonic Sensor Lab.!\r\n") ;
+    pc.write(buffer, strlen(buffer)) ;
+    while(1) 
+    {  
+        sprintf(buffer,"The ditance is %.2f [cm] \n\r",srf05.read()) ;
+        pc.write(buffer,strlen(buffer)) ;
         
-        sprintf(buffer,"The ditance is %.2f [cm] \n\r",srf05.read());
-        pc.write(buffer,strlen(buffer));
-        
-        ThisThread::sleep_for(3000ms);
+        ThisThread::sleep_for(3000ms) ;
     }
 }
