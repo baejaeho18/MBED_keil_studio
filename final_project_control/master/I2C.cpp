@@ -3,31 +3,31 @@
 
 void I2C_Config (void)
 {
-    //RESET I2C
+    // RESET I2C
     I2C1->CR1 |= (1 << 15) ;
-    //AFTER RESET` PULL THE I2C
+    // AFTER RESET` PULL THE I2C
     I2C1->CR1 &= ~(1 << 15) ;
-    //I2C PERIPHERAL CLOCK FREQUENCY-> TO SET THE 1000KHZ CLOCK BUT WE HAVE TO 400KHZ
-    //I2C PERIPHERAL CLOCK -> 4MHZ->250ns,,, CCR=(1000+4000)NS/(250)NS=20 AND SET TRISE VALUE
+    // I2C PERIPHERAL CLOCK FREQUENCY-> TO SET THE 1000KHZ CLOCK BUT WE HAVE TO 400KHZ
+    // I2C PERIPHERAL CLOCK -> 4MHZ->250ns,,, CCR=(1000+4000)NS/(250)NS=20 AND SET TRISE VALUE
     I2C1->CR2 |= (45 << 0) ;
     I2C1->CCR = 225 << 0 ;
     I2C1->TRISE = 46 ;
-    //ENABLE THE PERIPHERAL
+    // ENABLE THE PERIPHERAL
     I2C1->CR1 |= (1 << 0) ; 
   }
 
-void I2C_Write(uint8_t data)
+void I2C_Write (uint8_t data)
 {
-    while (!(I2C1->SR1 & (1 << 7))) ; //wait for TXE bit to set
+    while (!(I2C1->SR1 & (1 << 7))) ; // wait for TXE bit to set
     I2C1->DR = data ;
-    while (!(I2C1->SR1 & (1 << 2))) ;   //wait for BTF bit to set
+    while (!(I2C1->SR1 & (1 << 2))) ;   // wait for BTF bit to set
 }
 
 void I2C_Start (void)
 {
     I2C1->CR1 |= (1 << 10) ;
-    I2C1->CR1 |= (1 << 8) ;    //GENERATE START
-     while (!(I2C1->SR1 & (1 << 0))) ; // wait for SB bit to set
+    I2C1->CR1 |= (1 << 8) ;    // GENERATE START
+    while (!(I2C1->SR1 & (1 << 0))) ; // wait for SB bit to set
 }
 
 
@@ -38,7 +38,7 @@ void I2C_Address (uint8_t Address)
     uint8_t temp = I2C1->SR1 | I2C1->SR2 ;  //read SR1 and SR2 to clear 
 }
 
-void I2C_Stop(void)
+void I2C_Stop (void)
 {
     I2C1->CR1 |= ( 1 << 9 ) ;
 }
