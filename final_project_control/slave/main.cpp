@@ -38,10 +38,10 @@ DigitalOut led1(LED1) ;
 BufferedSerial hm10(PA_9, PA_10, 9600) ; // TX, RX, baud rate 9600
 BufferedSerial pc(CONSOLE_TX, CONSOLE_RX, 115200) ;
 
-void flag_func(){
-    if(pc.readable() && flag==0){
-        flag=1;
-    }
+void flag_func()
+{
+    if (pc.readable() && flag == 0)
+        flag = 1 ;
 }
 
 
