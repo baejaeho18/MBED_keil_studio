@@ -8,35 +8,35 @@
 #define WS2812_NUM_LEDS 8
 #define WS2812_RESET_PULSE 60
 #define WS2812_BUFFER_SIZE (WS2812_NUM_LEDS * 24 + WS2812_RESET_PULSE)
-SPI spi(ARDUINO_UNO_D11, ARDUINO_UNO_D12, ARDUINO_UNO_D13);
-uint8_t ws2812_buffer[WS2812_BUFFER_SIZE];
-uint8_t empty=0;
-uint8_t* address=0;
-uint8_t* address2=0;
-uint8_t* address3=0;
-void turnOnLED(int color);
-void ws2812_init(void);
-void ws2812_send_spi(void);
+SPI spi(ARDUINO_UNO_D11, ARDUINO_UNO_D12, ARDUINO_UNO_D13) ;
+uint8_t ws2812_buffer[WS2812_BUFFER_SIZE] ;
+uint8_t empty = 0 ;
+uint8_t* address = 0 ;
+uint8_t* address2 = 0 ;
+uint8_t* address3 = 0 ;
+void turnOnLED(int color) ;
+void ws2812_init(void) ;
+void ws2812_send_spi(void) ;
 void ws2812_pixel(uint16_t led_no, uint8_t r, uint8_t g, uint8_t b);
 void ws2812_pixel_all(uint8_t r, uint8_t g, uint8_t b);
-volatile int flag=0;
-volatile int flag2=0;
-volatile int j=0;
-volatile int led_num;
-volatile int busy=0;
+volatile int flag = 0 ;
+volatile int flag2 = 0 ;
+volatile int j = 0 ;
+volatile int led_num ;
+volatile int busy = 0 ;
 
 
-float stack;
-int pre_direction;
+float stack ;
+int pre_direction ;
 //--------------------------------------------------dma------------------------------
-static void MX_DMA_Init(void);
-static void DMA_IRQHandler(void);
-static void DMA2_Stream3_IRQHandler(void);
+static void MX_DMA_Init(void) ; 
+static void DMA_IRQHandler(void) ;
+static void DMA2_Stream3_IRQHandler(void) ;
 
-DigitalOut led1(LED1);
+DigitalOut led1(LED1) ;
 
-BufferedSerial hm10(PA_9, PA_10, 9600); // TX, RX, baud rate 9600
-BufferedSerial pc(CONSOLE_TX,CONSOLE_RX,115200);
+BufferedSerial hm10(PA_9, PA_10, 9600) ; // TX, RX, baud rate 9600
+BufferedSerial pc(CONSOLE_TX, CONSOLE_RX, 115200) ;
 
 void flag_func(){
     if(pc.readable() && flag==0){
