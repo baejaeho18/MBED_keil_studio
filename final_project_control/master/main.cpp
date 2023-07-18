@@ -166,12 +166,12 @@ int main()
                 Rxr_data[i] = Rx_data[i] ;
             }
             ThisThread::sleep_for(50ms) ;
-            sprintf(cmd, "%u,%u,%u,%u,%u,%u\r\n", Rxr_data[0],Rxr_data[1],Rxr_data[2],Rxr_data[3],Rxr_data[4],Rxr_data[5]);
+            sprintf(cmd, "%u,%u,%u,%u,%u,%u\r\n", Rxr_data[0], Rxr_data[1], Rxr_data[2], Rxr_data[3], Rxr_data[4], Rxr_data[5]);
             ThisThread::sleep_for(50ms) ;
             pc.write(cmd,sizeof(cmd)) ;
             hm10.write(cmd, sizeof(cmd)) ;
             
-            timer.attach(&trig_mpu_flag,70ms) ;    
+            timer.attach(&trig_mpu_flag, 70ms) ;    
         }
 
         
