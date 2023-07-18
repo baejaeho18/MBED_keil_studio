@@ -11,11 +11,9 @@
 #define GYRO_XOUT_H_REG 0X43
 #define PWR_MGMT_1_REG 0x6B
 #define WHO_AM_I_REG 0x75
-
-
  
-void pin_setup();
-void mpu_setup();
-void mpu_write(uint8_t Address, uint8_t Reg , uint8_t Data);
-void mpu_read(uint8_t Address, uint8_t Reg , uint8_t *buffer, uint8_t size);
+void pin_setup() ;
+void mpu_setup() ;
+void mpu_write(uint8_t Address, uint8_t Reg , uint8_t Data) ;
+void mpu_read(uint8_t Address, uint8_t Reg , uint8_t *buffer, uint8_t size) ;
 
