@@ -46,13 +46,13 @@ void mpu_write(uint8_t address, uint8_t reg, uint8_t data)
     I2C_Stop() ;
 }
 
-void mpu_read(uint8_t Address, uint8_t Reg, uint8_t *buffer, uint8_t size)
+void mpu_read(uint8_t address, uint8_t reg, uint8_t *buffer, uint8_t size)
 {
     I2C_Start() ;
-    I2C_Address(Address) ; 
-    I2C_Write(Reg) ;
+    I2C_Address(address) ; 
+    I2C_Write(reg) ;
     I2C_Start() ; //REPEATSTART
-    I2C_Read(Address + 0x01, buffer, size) ;
+    I2C_Read(address + 0x01, buffer, size) ;
     I2C_Stop() ;
     ThisThread::sleep_for(50ms) ;
 }
