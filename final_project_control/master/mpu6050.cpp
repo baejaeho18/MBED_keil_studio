@@ -22,7 +22,7 @@ void pin_setup()
     GPIOB->PUPDR &= ~(0b11<<14) ;
     GPIOB->PUPDR |= (0b01<<14) ;
     //HIGH SPEED
-    GPIOB->OSPEEDR |= (3 << 12) |( 3 << 14) ;
+    GPIOB->OSPEEDR |= (3 << 12) | ( 3 << 14) ;
     //i2c scl->PB6->D10
     GPIOB->AFR[0] &= ~(0B1111<<24) ;
     GPIOB->AFR[0] |= (0B0100<<24) ;
