@@ -167,32 +167,34 @@ int main()
                         {
                             temp[temp_idx] = '\0' ;
                             ble_data[b_data_counter] = atoi(temp) ;
-                            b_data_counter += 1;
-                            char temp[40];
-                            temp_idx=0;
+                            b_data_counter += 1 ;
+                            char temp[40] ;
+                            temp_idx = 0 ;
                         }
-                        else if(cmd[k]=='\r' || cmd[k]=='\n'){
-                            temp[temp_idx]='\0';
-                            ble_data[b_data_counter]=atoi(temp);
-                            break;
+                        else if (cmd[k] == '\r' || cmd[k] == '\n')
+                        {
+                            temp[temp_idx] = '\0' ;
+                            ble_data[b_data_counter]=atoi(temp) ;
+                            break ;
                         }
                     }
-                    else {
-                        break;
+                    else
+                    {
+                        break ;
                     }
                 }
-                char DaTa[21];
-                //sprintf(DaTa, "\r\n%d,%d,%d,%d,%d,%d\r\n",ble_data[0],ble_data[1],ble_data[2],ble_data[3],ble_data[4],ble_data[5]);
-                //pc.write(DaTa,sizeof(DaTa));
-                char cmd[40];
+                char DaTa[21] ;
+                //sprintf(DaTa, "\r\n%d,%d,%d,%d,%d,%d\r\n", ble_data[0], ble_data[1], ble_data[2], ble_data[3], ble_data[4], ble_data[5]) ;
+                //pc.write(DaTa,sizeof(DaTa)) ;
+                char cmd[40] ;
                 
            
-                Accel_X_RAW = (int16_t) (ble_data[0] << 8 | ble_data[1]);
-                Accel_Y_RAW = (int16_t) (ble_data[2] << 8 | ble_data[3]);
-                Accel_Z_RAW = (int16_t) (ble_data[4] << 8 | ble_data[5]);
-                Ax= Accel_X_RAW/16384.0;
-                Ay= Accel_Y_RAW/16384.0;
-                Az= Accel_Z_RAW/16384.0;
+                Accel_X_RAW = (int16_t) (ble_data[0] << 8 | ble_data[1]) ;
+                Accel_Y_RAW = (int16_t) (ble_data[2] << 8 | ble_data[3]) ;
+                Accel_Z_RAW = (int16_t) (ble_data[4] << 8 | ble_data[5]) ;
+                Ax = Accel_X_RAW / 16384.0 ;
+                Ay = Accel_Y_RAW / 16384.0 ;
+                Az = Accel_Z_RAW / 16384.0 ;
 
                 sprintf(buff, "\r\n%f,%f,%f\r\n", Ax,Ay,Az);
                 pc.write(buff,sizeof(buff));
