@@ -196,22 +196,22 @@ int main()
                 Ay = Accel_Y_RAW / 16384.0 ;
                 Az = Accel_Z_RAW / 16384.0 ;
 
-                sprintf(buff, "\r\n%f,%f,%f\r\n", Ax,Ay,Az);
-                pc.write(buff,sizeof(buff));
+                sprintf(buff, "\r\n%f,%f,%f\r\n", Ax, Ay, Az) ;
+                pc.write(buff, sizeof(buff)) ;
 
-                if((Ax <= -0.2))
+                if (Ax <= -0.2)
                 {
-                    moveAlpha(stack,1);
-                    //moveForward(stack);
-                    turnOnLED(1);
+                    moveAlpha(stack, 1) ;
+                    //moveForward(stack) ;
+                    turnOnLED(1) ;
                 }
-                else if((0.2 <= Ax))
+                else if (0.2 <= Ax)
                 {
-                    moveAlpha(stack, 2);
-                    // moveBackward(stack);
-                    turnOnLED(2);
+                    moveAlpha(stack, 2) ;
+                    // moveBackward(stack) ;
+                    turnOnLED(2) ;
                 }
-                else if((0.2 <= Ay))
+                else if (0.2 <= Ay)
                 {
                     moveAlpha(stack, 3);
                     // turnRight(stack); 
@@ -292,74 +292,79 @@ int main()
 
 void turnOnLED(int direction)
 {
-    // wait_us(50000);
-    ws2812_pixel_all(0,0,0);
-    // ws2812_send_spi();
-    // wait_us(50000);
-    int g=0,r=0,b=0;
+    // wait_us(50000) ;
+    ws2812_pixel_all(0, 0, 0) ;
+    // ws2812_send_spi() ;
+    // wait_us(50000) ;
+    int g = 0, r = 0, b = 0 ;
 
     if (direction == 1) {
-        g=1;
+        g = 1 ;
     }
-    else if (direction ==2) {
-        b=1; 
+    else if (direction == 2) {
+        b = 1 ; 
     }
-    else if (direction ==3) {
-        g=1;
-        r=1;
-        b=1;
+    else if (direction == 3) {
+        g = 1 ;
+        r = 1 ;
+        b = 1 ;
     }
     else if (direction == 4) {
-        r=1;
+        r = 1 ;
     }
 
-    int i;
+    int i ;
     if(pre_direction == direction)
-        stack++;
+        stack++ ;
     else
-        stack=0;
+        stack = 0 ;
 
     if (stack < 0)
-        stack = 0;
-    if (stack >7)
-        stack = 7;
+        stack = 0 ;
+    if (stack > 7)
+        stack = 7 ;
 
-    for(i=0;i<=stack;i++){
+    for (i = 0 ; i <= stack ; i++)
+    {
         if(direction != 3)
-            ws2812_pixel(i,g,r,b);//G-R-B
+            ws2812_pixel(i,g,r,b) ;    //G-R-B
         else    // right side first
-            ws2812_pixel(7-i,g,r,b);
-        ws2812_send_spi();
+            ws2812_pixel(7 - i, g , r, b) ;
+
+        ws2812_send_spi() ;
     }
-    pre_direction = direction;
-    // wait_us(50000);
+    pre_direction = direction ;
+    // wait_us(50000) ;
 }
 
 
-void ws2812_init(void) {
-    spi.frequency(6250000);//0.08us *8 = 0.64us
-    memset(ws2812_buffer, 0, WS2812_BUFFER_SIZE);
-    spi.set_dma_usage(DMA_USAGE_ALWAYS);
-    MX_DMA_Init();
-    ws2812_send_spi();
+void ws2812_init(void) 
+{
+    spi.frequency(6250000) ;    //0.08us *8 = 0.64us
+    memset(ws2812_buffer, 0, WS2812_BUFFER_SIZE) ;
+    spi.set_dma_usage(DMA_USAGE_ALWAYS) ;
+    MX_DMA_Init() ;
+    ws2812_send_spi() ;
 }
 
-void ws2812_send_spi(void) {
+void ws2812_send_spi(void) 
+{
     //spi.write((const char*)ws2812_buffer,WS2812_BUFFER_SIZE,0,0); 
     //spi.transfer((const char*)ws2812_buffer, WS2812_BUFFER_SIZE, (char*) &empty, 0, NULL, SPI_EVENT_COMPLETE);
     
-    DMA2_Stream3->NDTR = (uint16_t)WS2812_BUFFER_SIZE;
-    DMA2_Stream3->CR |= (0x1UL << (0U));
+    DMA2_Stream3->NDTR = (uint16_t)WS2812_BUFFER_SIZE ;
+    DMA2_Stream3->CR |= (0x1UL << (0U)) ;
     
 }
 
-void WS2812_FILL_BUFFER(uint8_t COLOR ,uint8_t* ptr) {
-    for( uint8_t mask = 0x80; mask; mask >>= 1 ) { 
-        if( COLOR & mask ) { 
-            *ptr++ = 0x7c;//0111-1100
-        } else { 
-            *ptr++ = 0x40; //0100-0000;
-        }   
+void WS2812_FILL_BUFFER(uint8_t COLOR, uint8_t * ptr) 
+{
+    for (uint8_t mask = 0x80 ; mask ; mask >>= 1) 
+    { 
+        if ( COLOR & mask ) 
+            *ptr++ = 0x7c ;    //0111-1100
+        else 
+            *ptr++ = 0x40 ;     // 0100-0000 ;        
     }
 }
 
@@ -386,38 +391,38 @@ void ws2812_pixel_all(uint8_t g, uint8_t r, uint8_t b) {
 void MX_DMA_Init(void){
 
    __HAL_RCC_DMA2_CLK_ENABLE();
-   DMA2_Stream3->CR |= 0b11 << 25;       //DMA2 stream 3 channel 3
-    DMA2_Stream3->CR &= ~(0B11 << (11U)); // spi data register is 8 bit (half word)
-    DMA2_Stream3->CR &= ~(0B11 << (13U)); // memory size is is 8 bit (half word)
-    //DMA2_Stream3->CR &= ~(0B00 << (18U)); // double buffer mode
-    DMA2_Stream3->CR |=  (0b1UL << (10U)); // memory increment (MSIZE = 8 bit)
-    DMA2_Stream3->CR |= (0b1UL << (4U));//  active interrupt after transmition
+   DMA2_Stream3->CR |= 0b11 << 25 ;       //DMA2 stream 3 channel 3
+    DMA2_Stream3->CR &= ~(0B11 << 11U) ; // spi data register is 8 bit (half word)
+    DMA2_Stream3->CR &= ~(0B11 << 13U) ; // memory size is is 8 bit (half word)
+    //DMA2_Stream3->CR &= ~(0B00 << 18U) ; // double buffer mode
+    DMA2_Stream3->CR |=  (0b1UL << 10U) ; // memory increment (MSIZE = 8 bit)
+    DMA2_Stream3->CR |= (0b1UL << 4U) ;//  active interrupt after transmition
     // peripheral inc_disable
-    DMA2_Stream3->CR &= ~(0B1 << (8U)); // circular mode X normal mode 0
-    DMA2_Stream3->CR |= 0B01 << (6U);    // memory to peripheral
-    DMA2_Stream3->CR |= 0B11 << (16U);   // priority level very high
+    DMA2_Stream3->CR &= ~(0B1 << 8U) ; // circular mode X normal mode 0
+    DMA2_Stream3->CR |= 0B01 << (6U) ;     // memory to peripheral
+    DMA2_Stream3->CR |= 0B11 << (16U) ;   // priority level very high
 
-    DMA2_Stream3->FCR |= (0b1UL << (2U)); //(FIFO abled)
-    DMA2_Stream3->FCR &= ~(0b11<< 0); //dma_fifothreshold_1quarterfull
-    DMA2_Stream3->PAR = (uint32_t)&SPI1->DR; // peripheral base address(spi)
-    DMA2_Stream3->M0AR = (uint32_t)ws2812_buffer; // memory base address 0
+    DMA2_Stream3->FCR |= (0b1UL << 2U) ; //(FIFO abled)
+    DMA2_Stream3->FCR &= ~(0b11 << 0) ; //dma_fifothreshold_1quarterfull
+    DMA2_Stream3->PAR = (uint32_t) &SPI1->DR ; // peripheral base address(spi)
+    DMA2_Stream3->M0AR = (uint32_t) ws2812_buffer ; // memory base address 0
     //dma 스트림 비활성화
-    DMA2_Stream3->NDTR = (uint16_t)WS2812_BUFFER_SIZE;              // number of data
+    DMA2_Stream3->NDTR = (uint16_t) WS2812_BUFFER_SIZE ;              // number of data
     //다시 활성화
     // spi dma 활성화
-    SPI1->CR2 |= SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN;
-    HAL_NVIC_SetPriority(DMA2_Stream3_IRQn,0,0);
-    NVIC_SetVector(DMA2_Stream3_IRQn,(uint32_t)&DMA2_Stream3_IRQHandler);
-    NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+    SPI1->CR2 |= SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN ;
+    HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 0, 0) ;
+    NVIC_SetVector(DMA2_Stream3_IRQn, (uint32_t) &DMA2_Stream3_IRQHandler) ;
+    NVIC_EnableIRQ(DMA2_Stream3_IRQn) ;
 
     //DMA 전송 시작
-    DMA2_Stream3->CR |= DMA_SxCR_EN;
+    DMA2_Stream3->CR |= DMA_SxCR_EN ;
 }
 
-void DMA2_Stream3_IRQHandler(void){
-  if (DMA2->LISR & (0x1UL << (27U))) {
-    DMA2->LIFCR |= (0x1UL << (27U));
-  }
+void DMA2_Stream3_IRQHandler(void)
+{
+  if (DMA2->LISR & (0x1UL << 27U))
+    DMA2->LIFCR |= (0x1UL << 27U) ;
 }
 
 
