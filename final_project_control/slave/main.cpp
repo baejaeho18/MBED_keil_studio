@@ -17,8 +17,8 @@ uint8_t* address3 = 0 ;
 void turnOnLED(int color) ;
 void ws2812_init(void) ;
 void ws2812_send_spi(void) ;
-void ws2812_pixel(uint16_t led_no, uint8_t r, uint8_t g, uint8_t b);
-void ws2812_pixel_all(uint8_t r, uint8_t g, uint8_t b);
+void ws2812_pixel(uint16_t led_no, uint8_t r, uint8_t g, uint8_t b) ;
+void ws2812_pixel_all(uint8_t r, uint8_t g, uint8_t b) ;
 volatile int flag = 0 ;
 volatile int flag2 = 0 ;
 volatile int j = 0 ;
@@ -47,42 +47,46 @@ void flag_func()
 
 //--------------------------------------------------MPU VALUE------------------------------------------------------------------------
 
-int16_t Accel_X_RAW =0;
-int16_t Accel_Y_RAW =0;
-int16_t Accel_Z_RAW =0;
-int16_t Gyro_X_RAW=0;
-int16_t Gyro_Y_RAW=0;
-int16_t Gyro_Z_RAW=0;
-float Ax, Ay, Az;
-
+int16_t Accel_X_RAW = 0 ;
+int16_t Accel_Y_RAW = 0 ;
+int16_t Accel_Z_RAW = 0 ;
+int16_t Gyro_X_RAW = 0 ;
+int16_t Gyro_Y_RAW = 0 ;
+int16_t Gyro_Z_RAW = 0 ;
+float Ax, Ay, Az ;
+ 
 //-------------------------------------------------bluetooth code and timer------------------------------------------------------------
-Ticker timer;
-volatile int mpu_flag=0;
-char buff[80];
+Ticker timer ;
+volatile int mpu_flag = 0 ;
+char buff[80] ;
 
 void SetingDataReceived()
 {
     while (hm10.readable()) // flush hm10 buffer
     {
-        char raw[80];
-        char buf[80];
+        char raw[80] ;
+        char buf[80] ;
         
-        hm10.read(raw, sizeof(raw));
-        if (raw[0]=='O'){
-            for (int i = 0; i < sizeof(raw); i++){
-                if (raw[i]=='\r' || raw[i]=='\n' || raw[i]=='\0'){
-                    buf[i]='\r';
-                    buf[i+1]='\n';
-                    break;
+        hm10.read(raw, sizeof(raw)) ;
+        if (raw[0] == 'O')
+        {
+            for (int i = 0 ; i < sizeof(raw) ; i++)
+            {
+                if (raw[i] == '\r' || raw[i] == '\n' || raw[i] == '\0')
+                {
+                    buf[i] = '\r' ;
+                    buf[i + 1] = '\n' ;
+                    break ;
                 }
-                else{
-                    buf[i]=raw[i];
+                else
+                {
+                    buf[i] = raw[i] ;
                 }
             }
         }
-        pc.write(buf, sizeof(buf));
+        pc.write(buf, sizeof(buf)) ;
     }
-    ThisThread::sleep_for(50ms);
+    ThisThread::sleep_for(50ms) ;
 }
 
 
@@ -90,72 +94,79 @@ int main()
 {
     
     while (!hm10.writable()) {} // wait until writeable
-    ThisThread::sleep_for(2000ms);
-    pc.write("\r\nStarting Slave Program\r\n", 26);
-    hm10.write("AT+RENEW\r\n", 10);
-    pc.write("Device Reset\r\n", 14);
-    ThisThread::sleep_for(3000ms);
-    SetingDataReceived();
+    ThisThread::sleep_for(2000ms) ;
+    pc.write("\r\nStarting Slave Program\r\n", 26) ;
+    hm10.write("AT+RENEW\r\n", 10) ;
+    pc.write("Device Reset\r\n", 14) ;
+    ThisThread::sleep_for(3000ms) ;
+    SetingDataReceived() ;
 
-    hm10.write("AT+NAMEYS\r\n", 13);
-    pc.write("Device Naming\r\n", 15);
-    ThisThread::sleep_for(3000ms);
-    SetingDataReceived();
+    hm10.write("AT+NAMEYS\r\n", 13) ;
+    pc.write("Device Naming\r\n", 15) ;
+    ThisThread::sleep_for(3000ms) ;
+    SetingDataReceived() ;
 
     hm10.write("AT+ROLE0\r\n", 10); // set chip to slave mode
-    pc.write("Device Set to Slave\r\n", 21);
-    ThisThread::sleep_for(3000ms);
-    SetingDataReceived();
+    pc.write("Device Set to Slave\r\n", 21) ;
+    ThisThread::sleep_for(3000ms) ;
+    SetingDataReceived() ;
 
-    char c='0';
-    pc.write("Waiting for conn\r\n", 18);
+    char c = '0' ;
+    pc.write("Waiting for conn\r\n", 18) ;
     while (hm10.read(&c, 1) != 1 || c != '&') {} // wait for initialization character from master
-    hm10.write("&", 1); // send acknowledgement back to the master
-    pc.write("Received test character, sending ACK\r\n", 38);
-    ThisThread::sleep_for(2000ms);
+    hm10.write("&", 1) ; // send acknowledgement back to the master
+    pc.write("Received test character, sending ACK\r\n", 38) ;
+    ThisThread::sleep_for(2000ms) ;
     
-    int idx = 0;
-    char cmd[40];
-    setup();
+    int idx = 0 ;
+    char cmd[40] ;
+    setup() ;
 
-    address=&ws2812_buffer[0];
-    ws2812_init();
-    ws2812_pixel_all( 0,  0,  0);
-    //ws2812_pixel(led_num,1,0,0);//G-R-B
-    ws2812_send_spi();
+    address=&ws2812_buffer[0] ;
+    ws2812_init() ;
+    ws2812_pixel_all(0, 0, 0) ;
+    //ws2812_pixel(led_num, 1, 0 ,0) ;    //G-R-B
+    ws2812_send_spi() ;
 
-    stack = 0;
-    pre_direction=0;
+    stack = 0 ;
+    pre_direction = 0 ;
 
     while (1) 
     {
-        char buf;
+        char buf ;
         
-        uint8_t ble_data[6];
-        int b_data_counter=0;
+        uint8_t ble_data[6] ;
+        int b_data_counter = 0 ;
        
-        if(hm10.readable()){
-            hm10.read(&buf, 1);
-            //pc.write(&buf,1);
-            if(buf != '\n' || buf=='\r'){
-                cmd[idx]=buf;
-                idx += 1;
+        if(hm10.readable())
+        {
+            hm10.read(&buf, 1) ;
+            //pc.write(&buf, 1) ;
+            if(buf != '\n' || buf=='\r')
+            {
+                cmd[idx] = buf ;
+                idx += 1 ;
             }
-            else if(buf=='\n'||buf=='\r'){
-                cmd[idx]=buf;
-                //pc.write(cmd,idx+1);
-                idx=0;
-                char temp[40];
-                int temp_idx=0;
-                for(int k=0; k < sizeof(cmd); k++){
-                    if(b_data_counter<6){
-                        if (cmd[k] >= '0' && cmd[k] <= '9'){
-                            temp[temp_idx]=cmd[k];
-                            temp_idx+=1;
+            else if(buf == '\n' || buf == '\r')
+            {
+                cmd[idx] = buf ;
+                //pc.write(cmd, idx + 1) ;
+                idx = 0 ;
+                char temp[40] ; 
+                int temp_idx = 0 ;
+                for (int k = 0 ; k < sizeof(cmd) ; k++)
+                {
+                    if (b_data_counter < 6) 
+                    {
+                        if (cmd[k] >= '0' && cmd[k] <= '9') 
+                        {
+                            temp[temp_idx] = cmd[k] ;
+                            temp_idx += 1 ;
                         }
-                        else if(cmd[k]==','){
-                            temp[temp_idx]='\0';
-                            ble_data[b_data_counter]=atoi(temp);
+                        else if (cmd[k] == ',')
+                        {
+                            temp[temp_idx] = '\0' ;
+                            ble_data[b_data_counter] = atoi(temp) ;
                             b_data_counter += 1;
                             char temp[40];
                             temp_idx=0;
