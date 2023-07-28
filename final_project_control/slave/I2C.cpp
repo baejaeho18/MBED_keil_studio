@@ -67,35 +67,37 @@ void I2C_Read (uint8_t Address, uint8_t * buffer, uint8_t size)
         while (!(I2C1->SR1 & (1 << 1))) ;
 
         I2C1->CR1 &= ~(1 << 10) ;
-        uint8_t temp = I2C1->SR1 | I2C1->SR2; 
+        uint8_t temp = I2C1->SR1 | I2C1->SR2 ; 
         I2C1->CR1 |= (1 << 9) ;
 
-        while(!(I2C1->SR1 & (1<<6)));
+        while (!(I2C1->SR1 & (1 << 6))) ;
 
-        buffer[size-remaining] = I2C1->DR;
+        buffer[size - remaining] = I2C1->DR ;
     }
-    else{
-        I2C1->DR =Address;
-        while(!(I2C1->SR1 & (1<<1)));
+    else
+    {
+        I2C1->DR = Address ;
+        while(!(I2C1->SR1 & (1 << 1))) ;
 
-        uint8_t temp = I2C1->SR1 | I2C1->SR2;
+        uint8_t temp = I2C1->SR1 | I2C1->SR2 ;
 
-        while(remaining>2){
-            while(!(I2C1->SR1& (1<<6)));
-            buffer[size-remaining] = I2C1->DR;
+        while (remaining > 2)
+        {
+            while (!(I2C1->SR1 & (1 << 6))) ;
+            buffer[size - remaining] = I2C1->DR ;
 
-            I2C1->CR1 |= 1<<10;
-            remaining--;
+            I2C1->CR1 |= 1 << 10 ;
+            remaining-- ;
         }
-        while(!(I2C1->SR1& (1<<6)));
-        buffer[size-remaining]= I2C1->DR;
+        while (!(I2C1->SR1 & (1 << 6))) ;
+        buffer[size - remaining] = I2C1->DR ;
 
-        I2C1->CR1 &= ~(1<<10);
+        I2C1->CR1 &= ~(1 << 10) ;
 
-        I2C1->CR1 |= (1<<9);
-        remaining--;
+        I2C1->CR1 |= (1 << 9) ;
+        remaining-- ;
 
-        while(!(I2C1->SR1 & (1<<6)));
-        buffer[size-remaining] = I2C1->DR;
+        while (!(I2C1->SR1 & (1 << 6))) ;
+        buffer[size - remaining] = I2C1->DR ;
     }
 }
