@@ -17,7 +17,7 @@
 void pin_setup() ;
 void mpu_setup() ;
 void mpu_write(uint8_t Address, uint8_t Reg, uint8_t Data) ;
-void mpu_read(uint8_t Address, uint8_t Reg, uint8_t *buffer, uint8_t size) ;
+void mpu_read(uint8_t Address, uint8_t Reg, uint8_t * buffer, uint8_t size) ;
 
 
 void I2C_Config(void) ;
@@ -26,4 +26,4 @@ void I2C_Start(void) ;
 void I2C_Address (uint8_t Address) ; 
 void I2C_Stop(void) ;
 void I2C_WriteMulti(uint8_t * data, uint8_t size) ;
-void I2C_Read (uint8_t Address, uint8_t *buffer, uint8_t size) ;
+void I2C_Read(uint8_t Address, uint8_t * buffer, uint8_t size) ;
