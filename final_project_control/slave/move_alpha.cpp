@@ -52,12 +52,12 @@ void moveAlpha(float stack, int direction)
     }
     else if (direction == RIGHT) 
     {
-        motorLeftPin1 = 0;  
-        motorLeftPin2 = 1;
-        motorRightPin1 = 1;
-        motorRightPin2 = 0;
-        motorLeftPWMPin.write(speed*rotate_accel);
-        motorRightPWMPin.write(speed*rotate_accel);
+        motorLeftPin1 = 0 ;  
+        motorLeftPin2 = 1 ;
+        motorRightPin1 = 1 ;
+        motorRightPin2 = 0 ;
+        motorLeftPWMPin.write(speed*rotate_accel) ;
+        motorRightPWMPin.write(speed*rotate_accel) ;
     }
     else if (direction == STOP) {
         motorLeftPin1 = 0;
