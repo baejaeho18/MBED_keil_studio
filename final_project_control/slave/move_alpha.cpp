@@ -118,13 +118,15 @@ void setup()
 // }
 
 // // 우회전
-// void turnRight(float stack, int stack) {
-//    motorLeftPin1 = 0;
-//   motorLeftPin2 = 1;
-//   motorRightPin1 = 1;
-//   motorRightPin2 = 0;
-//   motorLeftPWMPin.write(a * 0.2*(stack+1));
-//   motorRightPWMPin.write(a * 0.2*(stack+1));
+// void turnRight(float stack, int stack) 
+// {
+// 
+//   motorLeftPin1 = 0 ;
+//   motorLeftPin2 = 1 ;
+//   motorRightPin1 = 1 ;
+//   motorRightPin2 = 0 ;
+//   motorLeftPWMPin.write(a * 0.2 * (stack + 1)) ;
+//   motorRightPWMPin.write(a * 0.2 * (stack + 1)) ;
 // // }
 
 // // 정지
