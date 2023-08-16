@@ -59,31 +59,34 @@ void moveAlpha(float stack, int direction)
         motorLeftPWMPin.write(speed*rotate_accel) ;
         motorRightPWMPin.write(speed*rotate_accel) ;
     }
-    else if (direction == STOP) {
-        motorLeftPin1 = 0;
-        motorLeftPin2 = 0;
-        motorRightPin1 = 0;
-        motorRightPin2 = 0;
-        motorLeftPWMPin.write(0.0);
-        motorRightPWMPin.write(0.0);
+    else if (direction == STOP) 
+    {
+        motorLeftPin1 = 0 ;
+        motorLeftPin2 = 0 ;
+        motorRightPin1 = 0 ;
+        motorRightPin2 = 0 ;
+        motorLeftPWMPin.write(0.0) ;
+        motorRightPWMPin.write(0.0) ;
     }
 }
 
 // 초기 설정
-void setup() {
-  motorLeftPin1 = 0;
-  motorLeftPin2 = 0;
-  motorRightPin1 = 0;
-  motorRightPin2 = 0;
-  motorLeftPWMPin.period_ms(20);
-  motorRightPWMPin.period_ms(20);
-  motorLeftPWMPin.write(0.0);
-  motorRightPWMPin.write(0.0);
+void setup() 
+{
+  motorLeftPin1 = 0 ;
+  motorLeftPin2 = 0 ;
+  motorRightPin1 = 0 ;
+  motorRightPin2 = 0 ;
+  motorLeftPWMPin.period_ms(20) ;
+  motorRightPWMPin.period_ms(20) ;
+  motorLeftPWMPin.write(0.0) ;
+  motorRightPWMPin.write(0.0) ;
 }
 
 
 // // 앞으로 이동
-// void moveForward(float a, int stack) {
+// void moveForward(float a, int stack) 
+// {
 //   motorLeftPin1 = 0;
 //   motorLeftPin2 = 1;
 //   motorRightPin1 = 0;
