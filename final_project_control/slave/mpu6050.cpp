@@ -33,25 +33,27 @@ void pin_setup()
 
 void mpu_setup()
 {
-    pin_setup();
-    I2C_Config();
+    pin_setup() ;
+    I2C_Config() ;
 }
 
-void mpu_write(uint8_t Address, uint8_t Reg , uint8_t Data){
-    I2C_Start();
-    I2C_Address(Address);
-    I2C_Write (Reg);
-    I2C_Write (Data);
-    I2C_Stop();
+void mpu_write(uint8_t Address, uint8_t Reg , uint8_t Data)
+{
+    I2C_Start() ;
+    I2C_Address(Address) ;
+    I2C_Write (Reg) ;
+    I2C_Write (Data) ;
+    I2C_Stop() ;
 }
 
 
 
-void mpu_read(uint8_t Address, uint8_t Reg , uint8_t *buffer, uint8_t size){
-    I2C_Start();
-    I2C_Address (Address);
-    I2C_Write (Reg);
-    I2C_Start (); //REPEATSTART
-    I2C_Read (Address+0x01,buffer,size);
-    I2C_Stop ();
+void mpu_read(uint8_t Address, uint8_t Reg , uint8_t *buffer, uint8_t size)
+{
+    I2C_Start() ;
+    I2C_Address (Address) ;
+    I2C_Write (Reg) ;
+    I2C_Start () ; //REPEATSTART
+    I2C_Read (Address + 0x01, buffer, size) ;
+    I2C_Stop () ;
 }
