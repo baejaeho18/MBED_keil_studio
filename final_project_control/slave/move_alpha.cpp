@@ -87,34 +87,35 @@ void setup()
 // // 앞으로 이동
 // void moveForward(float a, int stack) 
 // {
-//   motorLeftPin1 = 0;
-//   motorLeftPin2 = 1;
-//   motorRightPin1 = 0;
-//   motorRightPin2 = 1;
+//   motorLeftPin1 = 0 ;
+//   motorLeftPin2 = 1 ;
+//   motorRightPin1 = 0 ;
+//   motorRightPin2 = 1 ;
 
-//   motorLeftPWMPin.write(a * 0.2*(stack+1));
-//   motorRightPWMPin.write(a * 0.2*(stack+1));
+//   motorLeftPWMPin.write(a * 0.2 * (stack + 1)) ;
+//   motorRightPWMPin.write(a * 0.2 * (stack + 1)) ;
 // }
 
 // // 뒤로 이동
-// void moveBackward(float a, int stack) {
-//   motorLeftPin1 = 1;
-//   motorLeftPin2 = 0;
-//   motorRightPin1 = 1;
-//   motorRightPin2 = 0;
-//   motorLeftPWMPin.write(a * 0.2*(stack+1)/2);
-//   motorRightPWMPin.write(a * 0.2*(stack+1)/2);
+// void moveBackward(float a, int stack)
+// {
+//   motorLeftPin1 = 1 ;
+//   motorLeftPin2 = 0 ;
+//   motorRightPin1 = 1 ;
+//   motorRightPin2 = 0 ;
+//   motorLeftPWMPin.write(a * 0.2 * (stack + 1) / 2) ;
+//   motorRightPWMPin.write(a * 0.2 * (stack + 1) / 2) ;
 // }
 
 // // 좌회전
-// void turnLeft(float a, int stack) {
-  
-//   motorLeftPin1 = 1;
-//   motorLeftPin2 = 0;
-//   motorRightPin1 = 0;
-//   motorRightPin2 = 1;
-//   motorLeftPWMPin.write(a * 0.2*(stack+1)/2);
-//   motorRightPWMPin.write(a * 0.2*(stack+1)/2);
+// void turnLeft(float a, int stack) 
+// {
+//   motorLeftPin1 = 1 ;
+//   motorLeftPin2 = 0 ;
+//   motorRightPin1 = 0 ;
+//   motorRightPin2 = 1 ;
+//   motorLeftPWMPin.write(a * 0.2 * (stack + 1) / 2) ;
+//   motorRightPWMPin.write(a * 0.2 * (stack + 1) / 2) ;
 // }
 
 // // 우회전
@@ -130,11 +131,12 @@ void setup()
 // // }
 
 // // 정지
-// void stopMoving(float stack) {
-//   motorLeftPin1 = 0;
-//   motorLeftPin2 = 0;
-//   motorRightPin1 = 0;
-//   motorRightPin2 = 0;
-//   motorLeftPWMPin.write(0.0);
-//   motorRightPWMPin.write(0.0);
+// void stopMoving(float stack) 
+// {
+//   motorLeftPin1 = 0 ;
+//   motorLeftPin2 = 0 ;
+//   motorRightPin1 = 0 ;
+//   motorRightPin2 = 0 ;
+//   motorLeftPWMPin.write(0.0) ;
+//   motorRightPWMPin.write(0.0) ; 
 // }
