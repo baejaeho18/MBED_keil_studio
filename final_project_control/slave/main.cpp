@@ -119,7 +119,7 @@ int main()
     address=&ws2812_buffer[0] ;
     ws2812_init() ;
     ws2812_pixel_all(0, 0, 0) ;
-    // ws2812_pixel(led_num, 1, 0, 0) ;    //G-R-B
+    // ws2812_pixel(led_num, 1, 0, 0) ;    // G-R-B
     ws2812_send_spi() ;
 
     stack = 0 ;
@@ -136,7 +136,7 @@ int main()
         {
             hm10.read(&buf, 1) ;
             // pc.write(&buf, 1) ;
-            if (buf != '\n' || buf=='\r')
+            if (buf != '\n' || buf == '\r')
             {
                 cmd[idx] = buf ;
                 idx += 1 ;
@@ -144,7 +144,7 @@ int main()
             else if (buf == '\n' || buf == '\r')
             {
                 cmd[idx] = buf ;
-                //pc.write(cmd, idx + 1) ;
+                // pc.write(cmd, idx + 1) ;
                 idx = 0 ;
                 char temp[40] ; 
                 int temp_idx = 0 ;
@@ -182,7 +182,6 @@ int main()
                 // pc.write(DaTa,sizeof(DaTa)) ;
                 char cmd[40] ;
                 
-           
                 Accel_X_RAW = (int16_t) (ble_data[0] << 8 | ble_data[1]) ;
                 Accel_Y_RAW = (int16_t) (ble_data[2] << 8 | ble_data[3]) ;
                 Accel_Z_RAW = (int16_t) (ble_data[4] << 8 | ble_data[5]) ;
@@ -196,7 +195,7 @@ int main()
                 if (Ax <= -0.2)
                 {
                     moveAlpha(stack, 1) ;
-                    //moveForward(stack) ;
+                    // moveForward(stack) ;
                     turnOnLED(1) ;
                 }
                 else if (0.2 <= Ax)
@@ -211,7 +210,7 @@ int main()
                     // turnRight(stack) ; 
                     turnOnLED(3) ;
                 }
-                else if(Ay <= -0.2)
+                else if (Ay <= -0.2)
                 {
                     moveAlpha(stack, 4) ;
                     //turnLeft(stack) ;  
@@ -230,7 +229,6 @@ int main()
                     turnOnLED(0) ;
                 }
             }
-
         }
         wait_us(1000) ;
     }
@@ -330,7 +328,7 @@ void turnOnLED(int direction)
 
     for (i = 0 ; i <= stack ; i++)
     {
-        if(direction != 3)
+        if (direction != 3)
             ws2812_pixel(i, g, r, b) ;    // G-R-B
         else    // right side first
             ws2812_pixel(7 - i, g, r, b) ;
@@ -340,7 +338,6 @@ void turnOnLED(int direction)
     pre_direction = direction ;
     // wait_us(50000) ;
 }
-
 
 void ws2812_init(void) 
 {
@@ -358,7 +355,6 @@ void ws2812_send_spi(void)
     
     DMA2_Stream3->NDTR = (uint16_t)WS2812_BUFFER_SIZE ;
     DMA2_Stream3->CR |= (0x1UL << (0U)) ;
-    
 }
 
 void WS2812_FILL_BUFFER(uint8_t COLOR, uint8_t * ptr) 
@@ -371,7 +367,6 @@ void WS2812_FILL_BUFFER(uint8_t COLOR, uint8_t * ptr)
             *ptr++ = 0x40 ;     // 0100-0000 ;        
     }
 }
-
 
 void ws2812_pixel(uint16_t led_no, uint8_t g, uint8_t r, uint8_t b) 
 {
@@ -393,25 +388,24 @@ void ws2812_pixel_all(uint8_t g, uint8_t r, uint8_t b)
     }
 }
 
-
 void MX_DMA_Init(void)
 {
     __HAL_RCC_DMA2_CLK_ENABLE() ;
-    DMA2_Stream3->CR |= 0b11 << 25 ;       //DMA2 stream 3 channel 3
-    DMA2_Stream3->CR &= ~(0B11 << 11U) ; // spi data register is 8 bit (half word)
-    DMA2_Stream3->CR &= ~(0B11 << 13U) ; // memory size is is 8 bit (half word)
-    // DMA2_Stream3->CR &= ~(0B00 << 18U) ; // double buffer mode
-    DMA2_Stream3->CR |=  (0b1UL << 10U) ; // memory increment (MSIZE = 8 bit)
-    DMA2_Stream3->CR |= (0b1UL << 4U) ; //  active interrupt after transmition
+    DMA2_Stream3->CR |= 0b11 << 25 ;           // DMA2 stream 3 channel 3
+    DMA2_Stream3->CR &= ~(0B11 << 11U) ;     // spi data register is 8 bit (half word)
+    DMA2_Stream3->CR &= ~(0B11 << 13U) ;        // memory size is is 8 bit (half word)
+    // DMA2_Stream3->CR &= ~(0B00 << 18U) ;     // double buffer mode
+    DMA2_Stream3->CR |=  (0b1UL << 10U) ;     // memory increment (MSIZE = 8 bit)
+    DMA2_Stream3->CR |= (0b1UL << 4U) ;     //  active interrupt after transmition
     // peripheral inc_disable
-    DMA2_Stream3->CR &= ~(0B1 << 8U) ; // circular mode X normal mode 0
-    DMA2_Stream3->CR |= 0B01 << (6U) ;     // memory to peripheral
-    DMA2_Stream3->CR |= 0B11 << (16U) ;   // priority level very high
+    DMA2_Stream3->CR &= ~(0B1 << 8U) ;     // circular mode X normal mode 0
+    DMA2_Stream3->CR |= 0B01 << (6U) ;         // memory to peripheral
+    DMA2_Stream3->CR |= 0B11 << (16U) ;       // priority level very high
 
-    DMA2_Stream3->FCR |= (0b1UL << 2U) ; //(FIFO abled)
-    DMA2_Stream3->FCR &= ~(0b11 << 0) ; //dma_fifothreshold_1quarterfull
-    DMA2_Stream3->PAR = (uint32_t) &SPI1->DR ; // peripheral base address(spi)
-    DMA2_Stream3->M0AR = (uint32_t) ws2812_buffer ; // memory base address 0
+    DMA2_Stream3->FCR |= (0b1UL << 2U) ;     // (FIFO abled)
+    DMA2_Stream3->FCR &= ~(0b11 << 0) ;     // dma_fifothreshold_1quarterfull
+    DMA2_Stream3->PAR = (uint32_t) &SPI1->DR ;     // peripheral base address(spi)
+    DMA2_Stream3->M0AR = (uint32_t) ws2812_buffer ;     // memory base address 0
     // dma 스트림 비활성화
     DMA2_Stream3->NDTR = (uint16_t) WS2812_BUFFER_SIZE ;              // number of data
     // 다시 활성화
@@ -430,9 +424,6 @@ void DMA2_Stream3_IRQHandler(void)
     if (DMA2->LISR & (0x1UL << 27U))
         DMA2->LIFCR |= (0x1UL << 27U) ;
 }
-
-
-
 
     
 
