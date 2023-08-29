@@ -8,12 +8,13 @@
 #define WS2812_NUM_LEDS 8
 #define WS2812_RESET_PULSE 60
 #define WS2812_BUFFER_SIZE (WS2812_NUM_LEDS * 24 + WS2812_RESET_PULSE)
+
 SPI spi(ARDUINO_UNO_D11, ARDUINO_UNO_D12, ARDUINO_UNO_D13) ;
 uint8_t ws2812_buffer[WS2812_BUFFER_SIZE] ;
 uint8_t empty = 0 ;
-uint8_t* address = 0 ;
-uint8_t* address2 = 0 ;
-uint8_t* address3 = 0 ;
+uint8_t * address = 0 ;
+uint8_t * address2 = 0 ;
+uint8_t * address3 = 0 ;
 void turnOnLED(int color) ;
 void ws2812_init(void) ;
 void ws2812_send_spi(void) ;
@@ -25,7 +26,6 @@ volatile int j = 0 ;
 volatile int led_num ;
 volatile int busy = 0 ;
 
-
 float stack ;
 int pre_direction ;
 //--------------------------------------------------dma------------------------------
@@ -35,7 +35,7 @@ static void DMA2_Stream3_IRQHandler(void) ;
 
 DigitalOut led1(LED1) ;
 
-BufferedSerial hm10(PA_9, PA_10, 9600) ; // TX, RX, baud rate 9600
+BufferedSerial hm10(PA_9, PA_10, 9600) ;     // TX, RX, baud rate 9600
 BufferedSerial pc(CONSOLE_TX, CONSOLE_RX, 115200) ;
 
 void flag_func()
@@ -43,10 +43,7 @@ void flag_func()
     if (pc.readable() && flag == 0)
         flag = 1 ;
 }
-
-
 //--------------------------------------------------MPU VALUE------------------------------------------------------------------------
-
 int16_t Accel_X_RAW = 0 ;
 int16_t Accel_Y_RAW = 0 ;
 int16_t Accel_Z_RAW = 0 ;
@@ -54,7 +51,6 @@ int16_t Gyro_X_RAW = 0 ;
 int16_t Gyro_Y_RAW = 0 ;
 int16_t Gyro_Z_RAW = 0 ;
 float Ax, Ay, Az ;
- 
 //-------------------------------------------------bluetooth code and timer------------------------------------------------------------
 Ticker timer ;
 volatile int mpu_flag = 0 ;
@@ -89,11 +85,9 @@ void SetingDataReceived()
     ThisThread::sleep_for(50ms) ;
 }
 
-
 int main()
 {
-    
-    while (!hm10.writable()) {} // wait until writeable
+    while (!hm10.writable()) {}     // wait until writeable
     ThisThread::sleep_for(2000ms) ;
     pc.write("\r\nStarting Slave Program\r\n", 26) ;
     hm10.write("AT+RENEW\r\n", 10) ;
@@ -106,14 +100,14 @@ int main()
     ThisThread::sleep_for(3000ms) ;
     SetingDataReceived() ;
 
-    hm10.write("AT+ROLE0\r\n", 10) ; // set chip to slave mode
+    hm10.write("AT+ROLE0\r\n", 10) ;     // set chip to slave mode
     pc.write("Device Set to Slave\r\n", 21) ;
     ThisThread::sleep_for(3000ms) ;
     SetingDataReceived() ;
 
     char c = '0' ;
     pc.write("Waiting for conn\r\n", 18) ;
-    while (hm10.read(&c, 1) != 1 || c != '&') {} // wait for initialization character from master
+    while (hm10.read(&c, 1) != 1 || c != '&') {}     // wait for initialization character from master
     hm10.write("&", 1) ; // send acknowledgement back to the master
     pc.write("Received test character, sending ACK\r\n", 38) ;
     ThisThread::sleep_for(2000ms) ;
@@ -125,7 +119,7 @@ int main()
     address=&ws2812_buffer[0] ;
     ws2812_init() ;
     ws2812_pixel_all(0, 0, 0) ;
-    //ws2812_pixel(led_num, 1, 0, 0) ;    //G-R-B
+    // ws2812_pixel(led_num, 1, 0, 0) ;    //G-R-B
     ws2812_send_spi() ;
 
     stack = 0 ;
@@ -138,16 +132,16 @@ int main()
         uint8_t ble_data[6] ;
         int b_data_counter = 0 ;
        
-        if(hm10.readable())
+        if (hm10.readable())
         {
             hm10.read(&buf, 1) ;
-            //pc.write(&buf, 1) ;
-            if(buf != '\n' || buf=='\r')
+            // pc.write(&buf, 1) ;
+            if (buf != '\n' || buf=='\r')
             {
                 cmd[idx] = buf ;
                 idx += 1 ;
             }
-            else if(buf == '\n' || buf == '\r')
+            else if (buf == '\n' || buf == '\r')
             {
                 cmd[idx] = buf ;
                 //pc.write(cmd, idx + 1) ;
@@ -184,8 +178,8 @@ int main()
                     }
                 }
                 char DaTa[21] ;
-                //sprintf(DaTa, "\r\n%d,%d,%d,%d,%d,%d\r\n", ble_data[0], ble_data[1], ble_data[2], ble_data[3], ble_data[4], ble_data[5]) ;
-                //pc.write(DaTa,sizeof(DaTa)) ;
+                // sprintf(DaTa, "\r\n%d,%d,%d,%d,%d,%d\r\n", ble_data[0], ble_data[1], ble_data[2], ble_data[3], ble_data[4], ble_data[5]) ;
+                // pc.write(DaTa,sizeof(DaTa)) ;
                 char cmd[40] ;
                 
            
@@ -337,7 +331,7 @@ void turnOnLED(int direction)
     for (i = 0 ; i <= stack ; i++)
     {
         if(direction != 3)
-            ws2812_pixel(i, g, r, b) ;    //G-R-B
+            ws2812_pixel(i, g, r, b) ;    // G-R-B
         else    // right side first
             ws2812_pixel(7 - i, g, r, b) ;
 
@@ -350,7 +344,7 @@ void turnOnLED(int direction)
 
 void ws2812_init(void) 
 {
-    spi.frequency(6250000) ;    //0.08us *8 = 0.64us
+    spi.frequency(6250000) ;    // 0.08us *8 = 0.64us
     memset(ws2812_buffer, 0, WS2812_BUFFER_SIZE) ;
     spi.set_dma_usage(DMA_USAGE_ALWAYS) ;
     MX_DMA_Init() ;
@@ -359,8 +353,8 @@ void ws2812_init(void)
 
 void ws2812_send_spi(void) 
 {
-    //spi.write((const char *)ws2812_buffer, WS2812_BUFFER_SIZE, 0, 0) ; 
-    //spi.transfer((const char *)ws2812_buffer, WS2812_BUFFER_SIZE, (char *)&empty, 0, NULL, SPI_EVENT_COMPLETE) ;
+    // spi.write((const char *)ws2812_buffer, WS2812_BUFFER_SIZE, 0, 0) ; 
+    // spi.transfer((const char *)ws2812_buffer, WS2812_BUFFER_SIZE, (char *)&empty, 0, NULL, SPI_EVENT_COMPLETE) ;
     
     DMA2_Stream3->NDTR = (uint16_t)WS2812_BUFFER_SIZE ;
     DMA2_Stream3->CR |= (0x1UL << (0U)) ;
@@ -383,16 +377,16 @@ void ws2812_pixel(uint16_t led_no, uint8_t g, uint8_t r, uint8_t b)
 {
     uint8_t * ptr = &ws2812_buffer[24 * led_no] ;
     
-        WS2812_FILL_BUFFER(g, ptr) ;
-        WS2812_FILL_BUFFER(r, ptr + 8) ;
-        WS2812_FILL_BUFFER(b, ptr + 16) ;
-    
+    WS2812_FILL_BUFFER(g, ptr) ;
+    WS2812_FILL_BUFFER(r, ptr + 8) ;
+    WS2812_FILL_BUFFER(b, ptr + 16) ;
 }
 
 void ws2812_pixel_all(uint8_t g, uint8_t r, uint8_t b) 
 {
     uint8_t * ptr = ws2812_buffer ;
-    for( uint16_t i = 0; i < WS2812_NUM_LEDS ; i++) {
+    for (uint16_t i = 0 ; i < WS2812_NUM_LEDS ; i++) 
+    {
         WS2812_FILL_BUFFER(g, ptr + i * 24) ;
         WS2812_FILL_BUFFER(r, ptr + i * 24 + 8) ;
         WS2812_FILL_BUFFER(b, ptr+i * 24 + 16) ;
@@ -402,11 +396,11 @@ void ws2812_pixel_all(uint8_t g, uint8_t r, uint8_t b)
 
 void MX_DMA_Init(void)
 {
-   __HAL_RCC_DMA2_CLK_ENABLE() ;
-   DMA2_Stream3->CR |= 0b11 << 25 ;       //DMA2 stream 3 channel 3
+    __HAL_RCC_DMA2_CLK_ENABLE() ;
+    DMA2_Stream3->CR |= 0b11 << 25 ;       //DMA2 stream 3 channel 3
     DMA2_Stream3->CR &= ~(0B11 << 11U) ; // spi data register is 8 bit (half word)
     DMA2_Stream3->CR &= ~(0B11 << 13U) ; // memory size is is 8 bit (half word)
-    //DMA2_Stream3->CR &= ~(0B00 << 18U) ; // double buffer mode
+    // DMA2_Stream3->CR &= ~(0B00 << 18U) ; // double buffer mode
     DMA2_Stream3->CR |=  (0b1UL << 10U) ; // memory increment (MSIZE = 8 bit)
     DMA2_Stream3->CR |= (0b1UL << 4U) ; //  active interrupt after transmition
     // peripheral inc_disable
@@ -418,23 +412,23 @@ void MX_DMA_Init(void)
     DMA2_Stream3->FCR &= ~(0b11 << 0) ; //dma_fifothreshold_1quarterfull
     DMA2_Stream3->PAR = (uint32_t) &SPI1->DR ; // peripheral base address(spi)
     DMA2_Stream3->M0AR = (uint32_t) ws2812_buffer ; // memory base address 0
-    //dma 스트림 비활성화
+    // dma 스트림 비활성화
     DMA2_Stream3->NDTR = (uint16_t) WS2812_BUFFER_SIZE ;              // number of data
-    //다시 활성화
+    // 다시 활성화
     // spi dma 활성화
     SPI1->CR2 |= SPI_CR2_TXDMAEN | SPI_CR2_RXDMAEN ;
     HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 0, 0) ;
     NVIC_SetVector(DMA2_Stream3_IRQn, (uint32_t) &DMA2_Stream3_IRQHandler) ;
     NVIC_EnableIRQ(DMA2_Stream3_IRQn) ;
 
-    //DMA 전송 시작
+    // DMA 전송 시작
     DMA2_Stream3->CR |= DMA_SxCR_EN ;
 }
 
 void DMA2_Stream3_IRQHandler(void)
 {
-  if (DMA2->LISR & (0x1UL << 27U))
-    DMA2->LIFCR |= (0x1UL << 27U) ;
+    if (DMA2->LISR & (0x1UL << 27U))
+        DMA2->LIFCR |= (0x1UL << 27U) ;
 }
 
 
