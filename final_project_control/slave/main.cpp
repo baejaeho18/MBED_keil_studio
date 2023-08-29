@@ -229,7 +229,8 @@ int main()
                     moveAlpha(stack, pre_direction) ;
                     turnOnLED(0) ;
                 }
-                else{   
+                else
+                {   
                     moveAlpha(stack, 0) ;
                     // stopMoving(stack) ;
                     turnOnLED(0) ;
@@ -237,47 +238,52 @@ int main()
             }
 
         }
-        wait_us(1000);
+        wait_us(1000) ;
     }
 }
 
 // void turnOnLED(int direction)
 // {
-//     // wait_us(50000);
-//     ws2812_pixel_all(0,0,0);
-//     // ws2812_send_spi();
-//     // wait_us(50000);
-//     int g=0,r=0,b=0;
+//     // wait_us(50000) ;
+//     ws2812_pixel_all(0, 0, 0) ; 
+//     // ws2812_send_spi() ;
+//     // wait_us(50000) ;
+//     int g = 0, r = 0, b = 0 ;
 
-//     if (pre_direction == 1) {
-//         g=1;
+//     if (pre_direction == 1) 
+//    {
+//         g = 1 ;
 //     }
-//     else if (pre_direction ==2) {
-//         b=1; 
+//     else if (pre_direction == 2) 
+//    {
+//         b = 1 ; 
 //     }
-//     else if (pre_direction ==3) {
-//         g=1;
-//         r=1;
-//         b=1;
+//     else if (pre_direction ==3) 
+//    {
+//         g = 1 ;
+//         r = 1 ;
+//         b = 1 ;
 //     }
-//     else if (pre_direction == 4) {
-//         r=1;
+//     else if (pre_direction == 4) 
+//    {
+//         r = 1 ;
 //     }
 
-//     int i;
+//     int i ;
 //     if(direction == 0)
-//         stack--;
+//         stack-- ;
 //     else if(pre_direction == direction)
-//         stack++;
+//         stack++ ;
 //     else
-//         stack=0;
+//         stack = 0 ;
 
 //     if (stack < 0)
-//         stack = 0;
-//     if (stack >7)
-//         stack = 7;
+//         stack = 0 ;
+//     if (stack > 7)
+//         stack = 7 ;
 
-//     for(i=0;i<=stack;i++){
+//     for (i = 0 ; i <= stack ; i++)
+//    {
 //         if(pre_direction != 3)
 //             ws2812_pixel(i,g,r,b);//G-R-B
 //         else    // right side first
@@ -298,23 +304,27 @@ void turnOnLED(int direction)
     // wait_us(50000) ;
     int g = 0, r = 0, b = 0 ;
 
-    if (direction == 1) {
+    if (direction == 1)
+    {
         g = 1 ;
     }
-    else if (direction == 2) {
+    else if (direction == 2) 
+    {
         b = 1 ; 
     }
-    else if (direction == 3) {
+    else if (direction == 3) 
+    {
         g = 1 ;
         r = 1 ;
         b = 1 ;
     }
-    else if (direction == 4) {
+    else if (direction == 4) 
+    {
         r = 1 ;
     }
 
     int i ;
-    if(pre_direction == direction)
+    if (pre_direction == direction)
         stack++ ;
     else
         stack = 0 ;
@@ -327,9 +337,9 @@ void turnOnLED(int direction)
     for (i = 0 ; i <= stack ; i++)
     {
         if(direction != 3)
-            ws2812_pixel(i,g,r,b) ;    //G-R-B
+            ws2812_pixel(i, g, r, b) ;    //G-R-B
         else    // right side first
-            ws2812_pixel(7 - i, g , r, b) ;
+            ws2812_pixel(7 - i, g, r, b) ;
 
         ws2812_send_spi() ;
     }
@@ -349,8 +359,8 @@ void ws2812_init(void)
 
 void ws2812_send_spi(void) 
 {
-    //spi.write((const char*)ws2812_buffer,WS2812_BUFFER_SIZE,0,0); 
-    //spi.transfer((const char*)ws2812_buffer, WS2812_BUFFER_SIZE, (char*) &empty, 0, NULL, SPI_EVENT_COMPLETE);
+    //spi.write((const char *)ws2812_buffer, WS2812_BUFFER_SIZE, 0, 0) ; 
+    //spi.transfer((const char *)ws2812_buffer, WS2812_BUFFER_SIZE, (char *)&empty, 0, NULL, SPI_EVENT_COMPLETE) ;
     
     DMA2_Stream3->NDTR = (uint16_t)WS2812_BUFFER_SIZE ;
     DMA2_Stream3->CR |= (0x1UL << (0U)) ;
@@ -362,41 +372,43 @@ void WS2812_FILL_BUFFER(uint8_t COLOR, uint8_t * ptr)
     for (uint8_t mask = 0x80 ; mask ; mask >>= 1) 
     { 
         if ( COLOR & mask ) 
-            *ptr++ = 0x7c ;    //0111-1100
+            *ptr++ = 0x7c ;    // 0111-1100
         else 
             *ptr++ = 0x40 ;     // 0100-0000 ;        
     }
 }
 
 
-void ws2812_pixel(uint16_t led_no, uint8_t g, uint8_t r, uint8_t b) {
-    uint8_t * ptr = &ws2812_buffer[24 * led_no];
+void ws2812_pixel(uint16_t led_no, uint8_t g, uint8_t r, uint8_t b) 
+{
+    uint8_t * ptr = &ws2812_buffer[24 * led_no] ;
     
-        WS2812_FILL_BUFFER(g,ptr);
-        WS2812_FILL_BUFFER(r,ptr+8);
-        WS2812_FILL_BUFFER(b,ptr+16);
+        WS2812_FILL_BUFFER(g, ptr) ;
+        WS2812_FILL_BUFFER(r, ptr + 8) ;
+        WS2812_FILL_BUFFER(b, ptr + 16) ;
     
 }
 
-void ws2812_pixel_all(uint8_t g, uint8_t r, uint8_t b) {
-    uint8_t * ptr = ws2812_buffer;
-    for( uint16_t i = 0; i < WS2812_NUM_LEDS; i++) {
-        WS2812_FILL_BUFFER(g,ptr+i*24);
-        WS2812_FILL_BUFFER(r,ptr+i*24+8);
-        WS2812_FILL_BUFFER(b,ptr+i*24+16);
+void ws2812_pixel_all(uint8_t g, uint8_t r, uint8_t b) 
+{
+    uint8_t * ptr = ws2812_buffer ;
+    for( uint16_t i = 0; i < WS2812_NUM_LEDS ; i++) {
+        WS2812_FILL_BUFFER(g, ptr + i * 24) ;
+        WS2812_FILL_BUFFER(r, ptr + i * 24 + 8) ;
+        WS2812_FILL_BUFFER(b, ptr+i * 24 + 16) ;
     }
 }
 
 
-void MX_DMA_Init(void){
-
-   __HAL_RCC_DMA2_CLK_ENABLE();
+void MX_DMA_Init(void)
+{
+   __HAL_RCC_DMA2_CLK_ENABLE() ;
    DMA2_Stream3->CR |= 0b11 << 25 ;       //DMA2 stream 3 channel 3
     DMA2_Stream3->CR &= ~(0B11 << 11U) ; // spi data register is 8 bit (half word)
     DMA2_Stream3->CR &= ~(0B11 << 13U) ; // memory size is is 8 bit (half word)
     //DMA2_Stream3->CR &= ~(0B00 << 18U) ; // double buffer mode
     DMA2_Stream3->CR |=  (0b1UL << 10U) ; // memory increment (MSIZE = 8 bit)
-    DMA2_Stream3->CR |= (0b1UL << 4U) ;//  active interrupt after transmition
+    DMA2_Stream3->CR |= (0b1UL << 4U) ; //  active interrupt after transmition
     // peripheral inc_disable
     DMA2_Stream3->CR &= ~(0B1 << 8U) ; // circular mode X normal mode 0
     DMA2_Stream3->CR |= 0B01 << (6U) ;     // memory to peripheral
