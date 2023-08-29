@@ -106,7 +106,7 @@ int main()
     ThisThread::sleep_for(3000ms) ;
     SetingDataReceived() ;
 
-    hm10.write("AT+ROLE0\r\n", 10); // set chip to slave mode
+    hm10.write("AT+ROLE0\r\n", 10) ; // set chip to slave mode
     pc.write("Device Set to Slave\r\n", 21) ;
     ThisThread::sleep_for(3000ms) ;
     SetingDataReceived() ;
@@ -125,7 +125,7 @@ int main()
     address=&ws2812_buffer[0] ;
     ws2812_init() ;
     ws2812_pixel_all(0, 0, 0) ;
-    //ws2812_pixel(led_num, 1, 0 ,0) ;    //G-R-B
+    //ws2812_pixel(led_num, 1, 0, 0) ;    //G-R-B
     ws2812_send_spi() ;
 
     stack = 0 ;
@@ -213,26 +213,26 @@ int main()
                 }
                 else if (0.2 <= Ay)
                 {
-                    moveAlpha(stack, 3);
-                    // turnRight(stack); 
-                    turnOnLED(3);
+                    moveAlpha(stack, 3) ;
+                    // turnRight(stack) ; 
+                    turnOnLED(3) ;
                 }
                 else if(Ay <= -0.2)
                 {
-                    moveAlpha(stack, 4);
-                    //turnLeft(stack); 
-                    turnOnLED(4);
+                    moveAlpha(stack, 4) ;
+                    //turnLeft(stack) ;  
+                    turnOnLED(4) ;
                 }
                 else if(stack != 0)
                 {
-                    // stopMoving(stack);
-                    moveAlpha(stack, pre_direction);
-                    turnOnLED(0);
+                    // stopMoving(stack) ;
+                    moveAlpha(stack, pre_direction) ;
+                    turnOnLED(0) ;
                 }
                 else{   
-                    moveAlpha(stack, 0);
-                    // stopMoving(stack);
-                    turnOnLED(0);
+                    moveAlpha(stack, 0) ;
+                    // stopMoving(stack) ;
+                    turnOnLED(0) ;
                 }
             }
 
