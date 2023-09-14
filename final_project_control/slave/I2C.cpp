@@ -30,7 +30,6 @@ void I2C_Start (void)
      while (!(I2C1->SR1 & (1 << 0))) ; // wait for SB bit to set
 }
 
-
 void I2C_Address (uint8_t Address)
 {
     I2C1->DR = Address ; // send the address
