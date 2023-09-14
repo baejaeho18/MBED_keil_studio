@@ -1,19 +1,15 @@
-
-
 #include "mbed.h"
 #include "mpu6050.h"
 #include "move_alpha.h"
 
-
- void MPU6050_Init() ;
- void mpu6050_read_accel() ;
+void MPU6050_Init() ;
+void mpu6050_read_accel() ;
 //--------------------------------------------------MPU VALUE------------------------------------------------------------------------
 
 //-------------------------------------------------bluetooth code and timer------------------------------------------------------------
 Ticker timer ;
 BufferedSerial hm10(PA_9, PA_10, 9600) ;  // TX, RX, baud rate 9600 
 BufferedSerial pc(CONSOLE_TX, CONSOLE_RX, 9600) ;
-
 
 volatile int mpu_flag = 0 ;
 char buf[80] ;
@@ -22,9 +18,7 @@ void trig_mpu_flag()
 { 
     mpu_flag = 1 ;
 }
-
 //----------------------------------------------------------------------------------------------------------------------------------
-
 void MPU6050_Init (void)
 {
     uint8_t check ;
@@ -52,8 +46,6 @@ void MPU6050_Init (void)
 
     }
 }
-
-
 
 void SetingDataReceived()
 {
@@ -83,8 +75,6 @@ void SetingDataReceived()
     }
     ThisThread::sleep_for(50ms);
 }
-
-
 
 int main()
 {   
